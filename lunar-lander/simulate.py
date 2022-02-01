@@ -1,7 +1,6 @@
 import time
 import torch
 import matplotlib.pyplot as plt
-from gym import wrappers
 
 scores = []
 
@@ -9,14 +8,12 @@ scores = []
 def simulate_env(env, agent_dqn, model_path, n_simulation=5):
     agent_dqn.q_network_local.load_state_dict(torch.load(model_path, map_location='cpu'))
     agent_dqn.q_network_target.load_state_dict(torch.load(model_path, map_location='cpu'))
-    env_wrapper = wrappers.Monitor(env, 'x.mp4', force=True)
-
     for _ in range(n_simulation):
         state = env.reset()
         plt.imshow(env.render(mode='rgb_array'))
         time.sleep(0.0001)
         score = 0
-        for _ in range(1000):
+        for i in range(1000):
             action = agent_dqn.choose_action(state)
             plt.imshow(env.render(mode='rgb_array'))
             time.sleep(0.0001)
